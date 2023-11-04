@@ -1,0 +1,8 @@
+Color Codes:
+
+
+blue: #24C4FC
+
+black: #333333
+
+
