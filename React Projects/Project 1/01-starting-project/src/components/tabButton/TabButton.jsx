@@ -1,11 +1,7 @@
-const TabButton = ({ children, ...props }) => {
-	function clickHandler() {
-		console.log("clicked");
-	}
-
+const TabButton = ({ children, isSelected, ...props }) => {
 	return (
 		<li>
-			<button onClick={clickHandler}>{children}</button>
+			<button className={isSelected ? "active":"inactive"} {...props}>{children}</button>
 		</li>
 	);
 };
