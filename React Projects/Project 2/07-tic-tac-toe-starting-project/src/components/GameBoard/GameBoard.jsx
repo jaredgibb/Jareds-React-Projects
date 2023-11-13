@@ -6,17 +6,16 @@ const initialGameBoard = [
 	[null, null, null],
 ];
 
-export default function GameBoard({onSelectSquare, turns}) {
-    let gameBoard = initialGameBoard;
-    let playerSymbol = 'X'
-    if (turns.length > 0 && turns[0].player === 'Player 2'){
-        playerSymbol = 'O'
-    }
-    for (const turn of turns){
-        gameBoard[turn.square.row][turn.square.col] = turn.player;
-    }
+export default function GameBoard({ onSelectSquare, turns }) {
+	let gameBoard = initialGameBoard;
+	let playerSymbol = "X";
+	if (turns.length > 0 && turns[0].player === "Player 2") {
+		playerSymbol = "O";
+	}
+	for (const turn of turns) {
+		gameBoard[turn.square.row][turn.square.col] = turn.player;
+	}
 
- 
 	return (
 		<ol id='game-board'>
 			{gameBoard.map((row, rowIndex) => {
@@ -27,7 +26,8 @@ export default function GameBoard({onSelectSquare, turns}) {
 								return (
 									<button
 										key={columnIndex}
-										onClick={()=>onSelectSquare(rowIndex, columnIndex)}
+										onClick={() => onSelectSquare(rowIndex, columnIndex)}
+										disabled={playerSymbol !== null}
 									>
 										{playerSymbol}
 									</button>
@@ -35,7 +35,7 @@ export default function GameBoard({onSelectSquare, turns}) {
 							})}
 						</ol>
 					</li>
-				); 
+				);
 			})}
 		</ol>
 	);

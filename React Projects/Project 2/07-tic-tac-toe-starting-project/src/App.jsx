@@ -2,6 +2,10 @@ import PlayerCard from "./components/PlayerCard/PlayerCard.jsx";
 import GameBoard from "./components/GameBoard/GameBoard.jsx";
 import Log from "./components/Log/Log.jsx";
 import { useState } from "react";
+
+import { WINNING_COMBINATIONS } from "./WINNING_COMBINATIONS.js";
+
+
 function App() {
 	const [players, setPlayers] = useState([
 		{ name: "Player 1", symbol: "X", isTurn: true },
@@ -19,7 +23,7 @@ function App() {
 			nextPlayer.isTurn = true;
 			setGameTurns((gameTurns) => {
 				const newGameTurns = [...gameTurns];
-				newGameTurns.unshift({ square: { row, col }, player: currentPlayer.symbol });
+				newGameTurns.unshift({ square: { row: row, col: col }, player: currentPlayer.symbol });
 				return newGameTurns;
 			});
 			return newPlayers;
@@ -47,10 +51,10 @@ function App() {
 				<GameBoard
 					onSelectSquare={handleSquareSelect}
 					activePlayer={players.find((elm) => elm.isTurn)}
-          turns={gameTurns}
+					turns={gameTurns}
 				/>
 			</div>
-		
+			<Log log={gameTurns} />
 		</main>
 	);
 }
