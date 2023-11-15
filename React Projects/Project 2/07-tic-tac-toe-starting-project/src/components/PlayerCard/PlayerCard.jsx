@@ -1,10 +1,13 @@
 import { useState } from "react";
 
-export default function Player({ initialName, symbol, isActive }) {
+export default function Player({ initialName, symbol, isActive, setPlayerName }) {
 	const [editMode, setEditMode] = useState(false);
 	const [name, setName] = useState(initialName);
 
 	function handleButtonClick() {
+        if (editMode) {
+            setPlayerName(symbol, name);
+        }
 		//best practice when setting a state based on the previous state
 		//is to use a callback function
 		//this is because the state is not updated immediately and
@@ -12,6 +15,7 @@ export default function Player({ initialName, symbol, isActive }) {
 		//because react schedules state updates and updates arent necessarily immediate
 		//so if you want to update a state based on the previous state, use a callback function
 		setEditMode((editMode) => !editMode);
+
 	}
 
 	function handleInputChange(event) {
