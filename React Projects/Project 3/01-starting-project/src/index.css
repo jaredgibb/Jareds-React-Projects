@@ -37,12 +37,15 @@ body {
   margin: 2rem auto;
   border-radius: 4px;
   background: linear-gradient(180deg, #307e6c, #2b996d);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .input-group {
   display: flex;
   justify-content: space-evenly;
-  gap: 1.5rem;
+  gap: 24px;
 }
 
 #user-input label {
