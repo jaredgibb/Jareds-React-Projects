@@ -31,7 +31,7 @@ export default function Results({ results, annualInvestment }) {
 											.reduce((partialSum, a) => partialSum + a, 0)
 									)}
 								</td>
-								<td>{formatter.format(results[0].annualInvestment + (result.year-1) * annualInvestment)}</td>
+								<td>{formatter.format((results[0].valueEndOfYear - results[0].interest) + ((result.year-1) * annualInvestment))}</td>
 							</tr>
 						);
 					})}
