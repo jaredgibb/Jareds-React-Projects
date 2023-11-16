@@ -41,7 +41,13 @@ function App() {
 	return (
 		<>
 			<UserInputs setVal={setVal} />
-			{(results.length > 0) && <Results results={results || []} initialInvestment={initialInvestment} annualInvestment={annualInvestment} />}
+			{results.length > 0 && (
+				<Results
+					results={results || []}
+					initialInvestment={initialInvestment}
+					annualInvestment={annualInvestment}
+				/>
+			)}
 		</>
 	);
 }

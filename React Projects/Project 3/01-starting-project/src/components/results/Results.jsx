@@ -1,7 +1,7 @@
 import { formatter } from "../../util/investment";
 
-export default function Results({results, initialInvestment, annualInvestment}) {
-    console.log(results)
+export default function Results({ results, annualInvestment }) {
+	console.log(results);
 	return (
 		<div>
 			<table id='result'>
@@ -31,7 +31,7 @@ export default function Results({results, initialInvestment, annualInvestment}) 
 											.reduce((partialSum, a) => partialSum + a, 0)
 									)}
 								</td>
-								<td>{formatter.format(initialInvestment + result.year * annualInvestment)}</td>
+								<td>{formatter.format(results[0].annualInvestment + (result.year-1) * annualInvestment)}</td>
 							</tr>
 						);
 					})}
