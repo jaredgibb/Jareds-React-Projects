@@ -23,7 +23,7 @@ export default function AuthInputs() {
 		setSubmitted(true);
 	}
 
-	const emailNotValid = (submitted && !enteredEmail.includes("@")) || undefined;
+	constd emailNotValid = (submitted && !enteredEmail.includes("@")) || undefined;
 	const passwordNotValid = (submitted && enteredPassword.trim().length < 6) || undefined;
 
 	return (
