@@ -1,4 +1,4 @@
-import Button from './Button.jsx';
+import Button from './reuseable_components/Button.jsx';
 
 export default function SideBar({
   onStartAdd,

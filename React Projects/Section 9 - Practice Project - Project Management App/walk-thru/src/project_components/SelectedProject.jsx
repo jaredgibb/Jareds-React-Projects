@@ -1,7 +1,9 @@
-export default function SelectedProject({ project, onDelete }) {
-      if (!project) {
-      return null;
-      }
+import Tasks from './task_components/Tasks';
+
+export default function SelectedProject({ project, deleteProject, tasks, handleAddTask, handleDeleteTask }) {
+  if (!project) {
+    return null;
+  }
   const formattedDate = new Date(project.date).toLocaleDateString('en-US', {
     weekday: 'short',
     year: 'numeric',
@@ -16,7 +18,9 @@ export default function SelectedProject({ project, onDelete }) {
           <h1 className='text-3xl font-bold text-stone-600 mb-2'>
             {project.title}
           </h1>
-          <button className='text-stone-600 mb-2 hover:text-stone-800'>
+          <button
+            className='text-stone-600 mb-2 hover:text-stone-800'
+            onClick={deleteProject}>
             Delete
           </button>
         </div>
@@ -25,7 +29,7 @@ export default function SelectedProject({ project, onDelete }) {
           {project.description}
         </p>
       </header>
-      TASKS
+      <Tasks addTask={handleAddTask} tasks={tasks} handleDeleteTask={handleDeleteTask} />
     </div>
   );
 }
