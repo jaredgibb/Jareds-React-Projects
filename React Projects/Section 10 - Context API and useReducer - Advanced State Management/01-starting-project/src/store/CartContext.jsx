@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import { createContext, useReducer } from 'react';
 import { DUMMY_PRODUCTS } from '../dummy-products.js';
 
 export const CartContext = createContext({
@@ -8,17 +8,14 @@ export const CartContext = createContext({
   updateQuantity: () => {},
 });
 
-export function CartProvider({ children }) {
-  const [shoppingCart, setShoppingCart] = useState({
-    items: [],
-  });
-
-  function handleAddItemToCart(id) {
-    setShoppingCart((prevShoppingCart) => {
-      const updatedItems = [...prevShoppingCart.items];
+function shoppingCartReducer(state, action) {
+  let updatedItems=[]
+  switch (action.type) { 
+    case 'ADD':
+       updatedItems = [...state.items];
 
       const existingCartItemIndex = updatedItems.findIndex(
-        (cartItem) => cartItem.id === id
+        (cartItem) => cartItem.id === action.payload
       );
       const existingCartItem = updatedItems[existingCartItemIndex];
 
@@ -29,24 +26,21 @@ export function CartProvider({ children }) {
         };
         updatedItems[existingCartItemIndex] = updatedItem;
       } else {
-        const product = DUMMY_PRODUCTS.find((product) => product.id === id);
+        const product = DUMMY_PRODUCTS.find((product) => product.id === action.payload);
         updatedItems.push({
-          id: id,
+          id: action.payload,
           name: product.title,
           price: product.price,
           quantity: 1,
         });
       }
-
       return {
+        ...state,
         items: updatedItems,
       };
-    });
-  }
-
-  function handleUpdateCartItemQuantity(productId, amount) {
-    setShoppingCart((prevShoppingCart) => {
-      const updatedItems = [...prevShoppingCart.items];
+    case 'UPDATE_QUANTITY':
+      const { productId, amount } = action.payload;
+       updatedItems = [...state.items];
       const updatedItemIndex = updatedItems.findIndex(
         (item) => item.id === productId
       );
@@ -64,13 +58,35 @@ export function CartProvider({ children }) {
       }
 
       return {
+        ...state,
         items: updatedItems,
       };
-    });
+    
+    default:
+      return state
+  }
+}
+
+export function CartProvider({ children }) {
+
+  const [shoppingCartState, shoppingCartStateDispatch] = useReducer(shoppingCartReducer, {
+    items: [],
+  })
+
+
+  //a reducer is a function that takes the previous state and an action and returns the next state.
+  
+
+  function handleAddItemToCart(id) {
+    shoppingCartStateDispatch({ type: 'ADD', payload: id })
+  }
+
+  function handleUpdateCartItemQuantity(productId, amount) {
+    shoppingCartStateDispatch({ type: 'UPDATE_QUANTITY', payload:{ productId, amount} })
   }
 
   const contextValue = {
-    items: shoppingCart.items,
+    items: shoppingCartState.items,
     totalAmount: 0,
     addItem: handleAddItemToCart,
     updateQuantity: handleUpdateCartItemQuantity,
