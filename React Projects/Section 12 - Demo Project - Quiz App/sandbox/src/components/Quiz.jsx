@@ -1,19 +1,37 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, memo } from 'react';
 import QUESTIONS from '../utils/QUESTIONS';
 import quizComplete from '../assets/quiz-complete.png';
 import QuestionTimer from './QuestionTimer';
+import Answers from './Answers';
+const AnswersMemo = memo(Answers);
 
 export default function Quiz() {
-  //we know what question the user is on by knowing how many items are in the array.
-  //we can use the length of the array to determine the current question
+  const [answerState, setAnswerState] = useState('');
   const [selectedAnswers, setSelectedAnswers] = useState([]);
-  const currentQuestionIndex = selectedAnswers.length;
+  const currentQuestionIndex =
+    answerState === '' ? selectedAnswers.length : selectedAnswers.length - 1;
+  const isQuizComplete = currentQuestionIndex === QUESTIONS.length;
 
-  const handleSelectClick = useCallback(function handleSelectClick(answer) {
-    setSelectedAnswers((prevState) => {
-      return [...prevState, answer];
-    });
-  }, []);
+  const handleSelectClick = useCallback(
+    function handleSelectClick(answer) {
+      setAnswerState('answered');
+      setSelectedAnswers((prevState) => {
+        return [...prevState, answer];
+      });
+
+      setTimeout(() => {
+        if (answer === QUESTIONS[currentQuestionIndex].answers[0]) {
+          setAnswerState('correct');
+        } else {
+          setAnswerState('incorrect');
+        }
+        setTimeout(() => {
+          setAnswerState('');
+        }, 2000);
+      }, 1000);
+    },
+    [currentQuestionIndex]
+  );
 
   const noSelector = useCallback(
     () => handleSelectClick(null),
@@ -41,9 +59,6 @@ export default function Quiz() {
     );
   };
 
-  const currentAnswers = [
-    ...(QUESTIONS?.[currentQuestionIndex]?.answers || []),
-  ];
   const Quiz = () => {
     return (
       <div id='quiz'>
@@ -51,30 +66,19 @@ export default function Quiz() {
           <QuestionTimer
             key={currentQuestionIndex}
             timeExpired={() => noSelector()}
-            timeout={10000}
+            timeout={5000}
           />
           <h2>{QUESTIONS[currentQuestionIndex].text}</h2>
-          <ul id='answers'>
-            {currentAnswers
-              .sort(() => Math.random() - 0.5)
-              .map((answer, index) => {
-                return (
-                  <li
-                    key={index}
-                    className='answer'>
-                    <button onClick={() => handleSelectClick(answer)}>
-                      {answer}
-                    </button>
-                  </li>
-                );
-              })}
-          </ul>
+          <AnswersMemo
+            answers={QUESTIONS[currentQuestionIndex].answers}
+            answerState={answerState}
+            selectedAnswer={selectedAnswers[selectedAnswers.length - 1]}
+            handleSelectClick={handleSelectClick}
+          />
         </div>
       </div>
     );
   };
 
-  return (
-    <>{currentQuestionIndex === QUESTIONS.length ? <Summary /> : <Quiz />}</>
-  );
+  return <>{isQuizComplete ? <Summary /> : <Quiz />}</>;
 }
