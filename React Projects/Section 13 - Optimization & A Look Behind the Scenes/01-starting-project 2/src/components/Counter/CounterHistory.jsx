@@ -20,11 +20,12 @@ function HistoryItem({ count }) {
 
 export default function CounterHistory({ history }) {
   log('<CounterHistory /> rendered', 2);
+  console.log('history', history)
 
   return (
     <ol>
       {history.map((count, index) => (
-        <HistoryItem key={index} count={count} />
+        <HistoryItem key={index} count={count.val} />
       ))}
     </ol>
   );
