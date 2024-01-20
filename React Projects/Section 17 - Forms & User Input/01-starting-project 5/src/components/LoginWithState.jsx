@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Input from "./Input.jsx";
 
 export default function Login() {
   // const [email, setEmail] = useState();
@@ -20,6 +21,8 @@ export default function Login() {
 
   const emailIsInvalid =
     !vals.email.includes("@") && didEdit.email && vals.email !== "";
+
+  const passwordIsInvalid = vals.password.length < 8 && didEdit.password;
 
   function onChange(event) {
     setVals({
@@ -45,32 +48,26 @@ export default function Login() {
       <h2>Login</h2>
 
       <div className="control-row">
-        <div className="control no-margin">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            onBlur={() => handleInputBlur("email")}
-            onChange={(e) => onChange(e)}
-            value={vals.email}
-          />
-        </div>
-        <div className="control-error">
-          {emailIsInvalid && <p>Please enter a valid email address</p>}
-        </div>
-
-        <div className="control no-margin">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            autoComplete="current password"
-            name="password"
-            onChange={(e) => onChange(e)}
-            value={vals.password}
-          />
-        </div>
+        <Input
+          label="Email"
+          id="email"
+          type="email"
+          name="email"
+          error={emailIsInvalid && "Please enter a valid email address"}
+          onBlur={() => handleInputBlur("email")}
+          onChange={(e) => onChange(e)}
+          value={vals.email}
+        />
+        <Input
+          label="Password"
+          id="password"
+          type="password"
+          autoComplete="current password"
+          name="password"
+          error={passwordIsInvalid && "Please enter a valid email password"}
+          onChange={(e) => onChange(e)}
+          value={vals.password}
+        />
       </div>
 
       <p className="form-actions">
