@@ -1,9 +1,12 @@
 import classes from "./Header.module.css";
-import { useDispatch } from "react-redux";
-import { userActions } from "../store/index";
+import { useDispatch, useSelector } from "react-redux";
+import { userActions } from "../store/auth-slice";
+
 
 const Header = () => {
   const dispatch = useDispatch();
+
+  const isAuthed = useSelector((state) => state.user.isAuthenticated)
 
 
   function logOutHandler(event) {
@@ -23,7 +26,7 @@ const Header = () => {
             <a href="/">My Sales</a>
           </li>
           <li>
-            <button onClick={logOutHandler}>Logout</button>
+            <button onClick={logOutHandler}>{isAuthed ? 'Logout' : 'Log In'}</button>
           </li>
         </ul>
       </nav>

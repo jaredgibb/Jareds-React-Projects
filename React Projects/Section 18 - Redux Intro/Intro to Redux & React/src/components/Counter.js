@@ -1,7 +1,7 @@
 import classes from "./Counter.module.css";
 import { useSelector, useDispatch /*connect*/ } from "react-redux";
-import  { INCREMENT, DECREMENT} from "../store/index";
-import { counterActions } from "../store/index";
+//import  { INCREMENT, DECREMENT} from "../store/index";
+import { counterActions } from "../store/counter-slice";
 
 //import { Component } from "react";
 

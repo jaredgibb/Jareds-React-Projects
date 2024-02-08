@@ -1,13 +1,16 @@
 //import { createStore } from "redux";
-import { createSlice, configureStore } from "@reduxjs/toolkit";
+import { /*createSlice,*/ configureStore } from "@reduxjs/toolkit";
+import  userReducer  from "./auth-slice";
+import  counterReducer  from "./counter-slice";
+//const initialState = { value: 0, showCounter: true };
 
-const initialState = { value: 0, showCounter: true };
 
 export const INCREMENT = "INCREMENT";
 export const DECREMENT = "DECREMENT";
 
 //createSlice takes an object with a name and an initial state, and an object with reducers
 //you can directly mutate the state in the reducers
+/*
 const counterSlice = createSlice({
   name: "counter",
   initialState,
@@ -27,10 +30,7 @@ const counterSlice = createSlice({
     },
   },
 });
-
-
-
-
+*/
 /*
 //with normal redux, you cannot mutate the stae directly, you have to return a new state object
 const reducer = (state = initialState, action) => {
@@ -53,7 +53,7 @@ const store = createStore(reducer, { value: 0 });
 */
 
 //const store = createStore(counterSlice.reducer);
-
+/*
 const userSlice = createSlice({
   name: "user",
   initialState: { isAuthenticated: false },
@@ -66,19 +66,10 @@ const userSlice = createSlice({
     },
   },
 });
-
-
-
-
+*/
 
 const store = configureStore({
-  reducer: { counter: counterSlice.reducer, user: userSlice.reducer },
+  reducer: { counter: counterReducer, user: userReducer },
 });
 
-export const userActions = userSlice.actions;
-export const counterActions = counterSlice.actions;
-
 export default store;
-
-
-
