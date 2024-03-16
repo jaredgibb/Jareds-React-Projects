@@ -1,30 +1,29 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import HomePage from "./pages/HomePage";
-import EventsPage, {
-  loader as eventsLoader,
-} from "./pages/EventsPage";
+import EditEventPage from './pages/EditEventPage';
+import ErrorPage from './pages/Error';
 import EventDetailPage, {
-  loader as singleEventLoader,
-  action as deleteEvent,
-} from "./pages/EventDetailPage";
-import NewEventPage, { action as newEvent } from "./pages/NewEventPage";
+  loader as eventDetailLoader,
+  action as deleteEventAction,
+} from './pages/EventDetailPage';
+import EventsPage, { loader as eventsLoader } from './pages/EventsPage';
+import EventsRootLayout from './roots/EventRoot';
+import HomePage from './pages/HomePage';
+import NewEventPage from './pages/NewEventPage';
+import RootLayout from './roots/Root';
+import { action as manipulateEventAction } from './components/EventForm';
+import NewsletterPage, { action as newsletterAction } from './pages/Newsletter';
 
-import EditEventPage from "./pages/EditEventPage";
-import Root from "./roots/Root";
-import EventRoot from "./roots/EventRoot";
-import { Error as ErrorPage } from "./components/Error";
-
-const BrowserRouter = createBrowserRouter([
+const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Root />,
+    path: '/',
+    element: <RootLayout />,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
       {
-        path: "events",
-        element: <EventRoot />,
-        errorElement: <ErrorPage />,
+        path: 'events',
+        element: <EventsRootLayout />,
         children: [
           {
             index: true,
@@ -32,27 +31,40 @@ const BrowserRouter = createBrowserRouter([
             loader: eventsLoader,
           },
           {
-            path: ":id",
-            id: "event",
-            loader: singleEventLoader,
+            path: ':eventId',
+            id: 'event-detail',
+            loader: eventDetailLoader,
             children: [
               {
                 index: true,
                 element: <EventDetailPage />,
-                action: deleteEvent,
+                action: deleteEventAction,
               },
-              { path: "edit", element: <EditEventPage /> },
+              {
+                path: 'edit',
+                element: <EditEventPage />,
+                action: manipulateEventAction,
+              },
             ],
           },
-          { path: "new", element: <NewEventPage />, action: newEvent },
+          {
+            path: 'new',
+            element: <NewEventPage />,
+            action: manipulateEventAction,
+          },
         ],
+      },
+      {
+        path: 'newsletter',
+        element: <NewsletterPage />,
+        action: newsletterAction,
       },
     ],
   },
 ]);
 
 function App() {
-  return <RouterProvider router={BrowserRouter} />;
+  return <RouterProvider router={router} />;
 }
 
 export default App;

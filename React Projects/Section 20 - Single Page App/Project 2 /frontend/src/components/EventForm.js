@@ -3,11 +3,14 @@ import {
   Form,
   useNavigation,
   useActionData,
+  redirect,
+  json,
 } from "react-router-dom";
 
 import classes from "./EventForm.module.css";
 
 function EventForm({ method, event }) {
+ 
   const data = useActionData();
 
   if (!event) {
@@ -32,7 +35,7 @@ function EventForm({ method, event }) {
   }
 
   return (
-    <Form method="post" className={classes.form}>
+    <Form method={method} className={classes.form}>
       {data && data.errors && (
         <ul>
           {Object.keys(data.errors).map((key) => {
@@ -42,13 +45,7 @@ function EventForm({ method, event }) {
       )}
       <p>
         <label htmlFor="title">Title</label>
-        <input
-          id="title"
-          type="text"
-          name="title"
-          
-          defaultValue={event.title}
-        />
+        <input id="title" type="text" name="title" defaultValue={event.title} />
       </p>
       <p>
         <label htmlFor="image">Image</label>
@@ -93,3 +90,44 @@ function EventForm({ method, event }) {
 }
 
 export default EventForm;
+
+export async function action({ request, params }) {
+  const data = await request.formData();
+  const method = request.method;
+
+  let baseURL = "http://localhost:8080/events";
+  if (method === "PATCH") {
+    const id = params.id;
+    baseURL = `${baseURL}/${id}`;
+  }
+
+  const event = {
+    title: data.get("title"),
+    date: data.get("date"),
+    image: data.get("image"),
+    description: data.get("description"),
+  };
+
+  const body = JSON.stringify(event);
+
+  const response = await fetch(baseURL, {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body,
+  });
+
+  if (response.status === 422) {
+    return response;
+  }
+
+  if (!response.ok) {
+    throw json(
+      { message: "could not save event" },
+      { status: response.status }
+    );
+  }
+
+  return redirect("/events");
+}
